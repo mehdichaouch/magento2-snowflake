@@ -4,6 +4,9 @@
 [![License: MIT](https://img.shields.io/github/license/opengento/magento2-snowflake.svg?style=flat-square)](./LICENSE)
 [![Packagist](https://img.shields.io/packagist/dt/opengento/module-snowflake.svg?style=flat-square)](https://packagist.org/packages/opengento/module-snowflake/stats)
 [![Packagist](https://img.shields.io/packagist/dm/opengento/module-snowflake.svg?style=flat-square)](https://packagist.org/packages/opengento/module-snowflake/stats)
+![Coding Standard workflow](https://github.com/opengento/magento2-snowflake/actions/workflows/coding-standard.yml/badge.svg?branch=main)
+![Mess Detector workflow](https://github.com/opengento/magento2-snowflake/actions/workflows/mess-detector.yml/badge.svg?branch=main)
+![PHPStan workflow](https://github.com/opengento/magento2-snowflake/actions/workflows/phpstan.yml/badge.svg?branch=main)
 
 This fun module adds ❄️️ on your website all the time or based on your visitor outside weather.
 

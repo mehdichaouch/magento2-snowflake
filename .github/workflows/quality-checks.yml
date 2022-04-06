@@ -1,0 +1,275 @@
+name: Quality Checks
+on:
+  push:
+    branches: [ testci ]
+
+jobs:
+  installation:
+    name: 🧪 Test plugin installation
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['7.4']
+
+    steps:
+      - name: 🚫 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: ⬇ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔧 Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: intl, zip, zlib
+          coverage: none
+          ini-values: memory_limit=-1
+          tools: composer:v1
+
+      - name: ⚡️ Test plugin installation
+        run: composer install --prefer-dist
+
+  phplint:
+    name: 🧪 PHP Parallel Lint
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['7.4']
+
+    steps:
+      - name: 🚫 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: ⬇ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔧 Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: intl, zip, zlib
+          coverage: none
+          ini-values: memory_limit=-1
+          tools: parallel-lint
+
+      - name: ⚡️ Run parallel-lint
+        run: parallel-lint .
+
+  phpcs:
+    name: 🧪 PHP Code Sniffer
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['7.4']
+
+    steps:
+      - name: 🚫 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: ⬇ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔧 Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: intl, zip, zlib
+          coverage: none
+          ini-values: memory_limit=-1
+          tools: cs2pr, phpcs
+
+      - name: ⚡️ Run phpcs
+        run: phpcs -q --report=checkstyle . | cs2pr
+
+  phpcpd:
+    name: 🧪 PHP Copy/Paste Detector
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['7.4']
+
+    steps:
+      - name: 🚫 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: ⬇ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔧 Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: intl, zip, zlib
+          coverage: none
+          ini-values: memory_limit=-1
+          tools: phpcpd
+
+      - name: ⚡️ Run phpcpd
+        run: phpcpd .
+
+  psalm:
+    name: 🧪 Psalm
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['7.4']
+
+    steps:
+      - name: 🚫 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: ⬇ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔧 Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: intl, zip, zlib
+          coverage: none
+          ini-values: memory_limit=-1
+          tools: psalm
+
+      - name: ⚡️ Run psalm
+        run: psalm --output-format=github --root=.
+
+  phpstan:
+    name: 🧪 PhpStan
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['7.4']
+
+    steps:
+      - name: 🚫 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: ⬇ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔧 Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: intl, zip, zlib
+          coverage: none
+          ini-values: memory_limit=-1
+          tools: phpstan
+
+      - name: ⚡️ Run phpstan
+        run: phpstan analyse --error-format github .
+
+  phpmd:
+    name: 🧪 PHP Mess Detector
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['7.4']
+
+    steps:
+      - name: 🚫 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: ⬇ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔧 Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: intl, zip, zlib
+          coverage: none
+          ini-values: memory_limit=-1
+          tools: phpmd
+
+      - name: ⚡️ Run phpmd
+        run: phpmd ./. text ./phpmd.xml
+
+  deptrac:
+    name: 🧪 Deptrac
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['7.4']
+
+    steps:
+      - name: 🚫 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: ⬇ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔧 Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: intl, zip, zlib
+          coverage: none
+          ini-values: memory_limit=-1
+          tools: deptrac
+
+      - name: ⚡️ Run deptrac
+        run: deptrac --formatter-github-actions=true
+
+  phpmnd:
+    name: 🧪 PHP Magic Number Detector
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['7.4']
+
+    steps:
+      - name: 🚫 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: ⬇ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔧 Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: intl, zip, zlib
+          coverage: none
+          ini-values: memory_limit=-1
+          tools: phpmnd
+
+      - name: ⚡️ Run phpmnd
+        run: phpmnd .
